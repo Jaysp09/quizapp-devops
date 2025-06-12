@@ -26,7 +26,7 @@ function Register() {
     };
 
     axios
-      .post("/api/user/add", { name, email, password }, options)
+      .post(`${process.env.REACT_APP_API_URL}/api/user/add`, { name, email, password }, options)
       .then((res) => {
         alert("account created");
         history.push('/login');

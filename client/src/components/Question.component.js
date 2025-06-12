@@ -35,7 +35,7 @@ function Question(props) {
     };
     axios
       .post(
-        "/api/test/submittest",
+        `${process.env.REACT_APP_API_URL}/api/test/submittest`,
         {
           pin,
           email,
@@ -110,7 +110,7 @@ function Question(props) {
   };
 
   const changeclass = (e) => {
-    const domele = e.nativeEvent.path;
+    const domele = e.nativeEvent.composedPath();
     domele.reverse();
     let ans = "";
     for (let ele of domele) {
@@ -127,66 +127,63 @@ function Question(props) {
   };
 
   return (
-    <Fragment>
-      <TestNav mins={mins} secs={secs} submithandler={submithandler} />
-      <div className={styles.qcontainer}>
-        {ques + 1}. {question}
-      </div>
-      <div id="options">
-        {options.map((option, index) => (
-          <div key={index} className={styles.container} onClick={changeclass}>
-            <input
-              className={styles.radios}
-              type="radio"
-              value={option}
-              name="options"
-              id={index.toString()}
-            />
-            <label htmlFor={index.toString()}>
-              {String.fromCharCode("A".charCodeAt(0) + index)}. {option}
-            </label>
-          </div>
-        ))}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
+  <Fragment>
+    <TestNav mins={mins} secs={secs} submithandler={submithandler} />
+    <div className={styles.qcontainer}>
+      {ques + 1}. {question}
+    </div>
+
+    <div id="options">
+      {options.map((option, index) => (
+        <div key={index} className={styles.container} onClick={changeclass}>
+          <input
+            className={styles.radios}
+            type="radio"
+            value={option}
+            name="options"
+            id={index.toString()}
+          />
+          <label htmlFor={index.toString()}>
+            {String.fromCharCode("A".charCodeAt(0) + index)}. {option}
+          </label>
+        </div>
+      ))}
+    </div>
+
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <a
+        onClick={(e) => {
+          if (ques !== 0) {
+            setques(ques - 1);
+            const answerOpts = document.querySelectorAll("#options > div");
+            answerOpts.forEach((opt) => {
+              opt.className = styles.container;
+            });
+          }
         }}
+        className={styles.buttons1}
       >
-        <a
-          onClick={(e) => {
-            if (ques == 0) {
-            } else {
-              setques(ques - 1);
-              let answeropt = e.nativeEvent.path[2].childNodes[2].childNodes;
-              for (let opt of answeropt) {
-                opt.className = styles.container;
-              }
-            }
-          }}
-          className={styles.buttons1}
-        >
-          &#8249;
-        </a>
-        <a
-          onClick={(e) => {
-            if (ques == length - 1) {
-            } else {
-              setques(ques + 1);
-              let answeropt = e.nativeEvent.path[2].childNodes[2].childNodes;
-              for (let opt of answeropt) {
-                opt.className = styles.container;
-              }
-            }
-          }}
-          className={styles.buttons2}
-        >
-          &#8250;
-        </a>
-      </div>
-    </Fragment>
-  );
+        &#8249;
+      </a>
+
+      <a
+        onClick={(e) => {
+          if (ques !== length - 1) {
+            setques(ques + 1);
+            const answerOpts = document.querySelectorAll("#options > div");
+            answerOpts.forEach((opt) => {
+              opt.className = styles.container;
+            });
+          }
+        }}
+        className={styles.buttons2}
+      >
+        &#8250;
+      </a>
+    </div>
+  </Fragment>
+);
+
 }
 
 export default Question;

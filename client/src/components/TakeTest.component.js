@@ -17,7 +17,7 @@ function Taketest() {
       },
     };
     axios
-      .post("/api/test/", { pin, email, name }, options)
+      .post(`${process.env.REACT_APP_API_URL}/api/test/`, { pin, email, name }, options)
       .then((res) => {
         localStorage.setItem("name", name);
         localStorage.setItem("email", email);
